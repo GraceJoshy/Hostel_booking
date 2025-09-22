@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hostel Management</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <span class="logo-text">Hostel Management</span>
+        </div>
+
+        <div class="form-wrapper">
+            <div id="registerDiv" class="form-section">
+                <h3>Register</h3>
+                <input type="text" id="regName" placeholder="Name"><br>
+                <input type="email" id="regEmail" placeholder="Email"><br>
+                <input type="password" id="regPassword" placeholder="Password"><br>
+
+                <select id="regRole">
+                    <option value="student">Student</option>
+                    <option value="warden">Admin/Warden</option>
+                </select><br>
+                <button onclick="register()">Register</button>
+            </div>
+
+            <div id="loginDiv" class="form-section">
+                <h3>Login</h3>
+                <input type="email" id="loginEmail" placeholder="Email"><br>
+                <input type="password" id="loginPassword" placeholder="Password"><br>
+                <select id="loginRole">
+                    <option value="student">Student</option>
+                    <option value="warden">Admin/Warden</option>
+                </select><br>
+                <button onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

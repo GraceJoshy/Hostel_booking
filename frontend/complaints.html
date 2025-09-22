@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaints</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="content-panel">
+        <div id="studentComplaintSection" style="display: none;">
+            <h2>Make a Complaint</h2>
+            <div class="form-group">
+                <input type="text" id="complaintRoomId" placeholder="Room ID (optional)">
+            </div>
+            <div class="form-group">
+                <textarea id="complaintText" placeholder="Enter complaint text..." rows="4"></textarea>
+            </div>
+            <button onclick="makeComplaint()">Submit Complaint</button>
+        </div>
+        <div id="adminComplaintSection" style="display: none;">
+            <h2>All Complaints</h2>
+            <div id="complaintsContent"></div>
+        </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('role');
+            if (role === 'student') {
+                document.getElementById('studentComplaintSection').style.display = 'block';
+            } else if (role === 'warden') {
+                document.getElementById('adminComplaintSection').style.display = 'block';
+                viewAllComplaints();
+            }
+        });
+    </script>
+</body>
+</html>

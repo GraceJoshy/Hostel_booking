@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payments</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="content-panel">
+        <div id="paymentFormSection">
+            <h2>Make a Payment</h2>
+            <div class="form-group">
+                <input type="text" id="bookingId" placeholder="Booking ID">
+            </div>
+            <div class="form-group">
+                <input type="number" id="paymentAmount" placeholder="Amount">
+            </div>
+            <button onclick="makePayment()">Pay</button>
+        </div>
+        <hr>
+        <div id="paymentsSection">
+            <h2>My Payment History</h2>
+            <div id="paymentsContent"></div>
+        </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            viewPayments();
+        });
+    </script>
+</body>
+</html>

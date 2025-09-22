@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rooms</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="content-panel">
+        <h2 id="pageTitle">Rooms</h2>
+        <div id="roomContent"></div>
+    </div>
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('role');
+            if (role === 'student') {
+                document.getElementById('pageTitle').innerText = 'Available Rooms';
+                viewRooms();
+            } else if (role === 'warden') {
+                document.getElementById('pageTitle').innerText = 'All Rooms';
+                viewAllRooms();
+            }
+        });
+    </script>
+</body>
+</html>
