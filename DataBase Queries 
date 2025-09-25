@@ -1,0 +1,117 @@
+CREATE DATABASE
+
+CREATE DATABASE IF NOT EXISTS hostel_db
+ DEFAULT CHARACTER SET utf8mb4 -- *all languages + emojis*
+ DEFAULT COLLATE utf8mb4_unicode_ci; -- how strings are compared and sorted.
+USE hostel_db; -- selection of the database
+-- OPTIONAL: create a dedicated DB user
+CREATE USER IF NOT EXISTS 'hosteluser'@'localhost' IDENTIFIED BY 'hostelpass';
+GRANT ALL PRIVILEGES ON hostel_db.* TO 'hosteluser'@'localhost';
+FLUSH PRIVILEGES;
+
+ CREATE TABLE STUDENT
+
+CREATE TABLE students (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(100) NOT NULL,
+ email VARCHAR(150) NOT NULL UNIQUE,
+ phone VARCHAR(20),
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+ CREATE TABLE ROOMS
+CREATE TABLE rooms (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ room_no VARCHAR(50) NOT NULL UNIQUE,
+ type ENUM('Single','Double','Triple') NOT NULL DEFAULT 'Single',
+ capacity INT NOT NULL DEFAULT 1,
+ current_occupancy INT NOT NULL DEFAULT 0,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CHECK (capacity >= 0 AND current_occupancy >= 0 AND current_occupancy <= capacity)
+) ENGINE=InnoDB;
+
+CREATE TABLE WARDENS
+
+CREATE TABLE wardens (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(100) NOT NULL,
+ email VARCHAR(150) UNIQUE,
+ phone VARCHAR(20),
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+ CREATE TABLE BOOKINGS
+
+CREATE TABLE bookings (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ student_id BIGINT NOT NULL,
+ room_id BIGINT NOT NULL,
+ booking_date DATE NOT NULL,
+ duration_days INT NOT NULL DEFAULT 30,
+ active TINYINT(1) NOT NULL DEFAULT 1,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_booking_student FOREIGN KEY (student_id) REFERENCES students(id)
+ ON DELETE RESTRICT ON UPDATE CASCADE,
+ CONSTRAINT fk_booking_room FOREIGN KEY (room_id) REFERENCES rooms(id)
+ ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+ALTER TABLE bookings
+ ADD COLUMN active_student BIGINT
+ GENERATED ALWAYS AS (CASE WHEN active=1 THEN student_id ELSE NULL END) VIRTUAL;
+CREATE UNIQUE INDEX ux_bookings_active_student ON bookings(active_student);
+
+CREATE TABLE PAYMENT
+
+CREATE TABLE payments (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ booking_id BIGINT NOT NULL,
+ amount DECIMAL(10,2) NOT NULL,
+ payment_date DATE NOT NULL,
+ status ENUM('PAID','PENDING','FAILED') NOT NULL DEFAULT 'PAID',
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_payment_booking FOREIGN KEY (booking_id) REFERENCES bookings(id)
+ ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+-- Relationship type: One-to-Many (1 warden → many rooms)
+ALTER TABLE rooms ADD COLUMN warden_id BIGINT;
+ALTER TABLE rooms ADD CONSTRAINT fk_room_warden FOREIGN KEY (warden_id) REFERENCES 
+wardens(id);
+
+CREATE TABLE COMPLAINTS
+CREATE TABLE complaints (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY, -- Unique complaint ID
+ student_id BIGINT NOT NULL, -- Which student raised it
+ warden_id BIGINT, -- Which warden is responsible (optional at first)
+ complaint_text TEXT NOT NULL, -- Complaint or query details
+ status ENUM('OPEN','IN_PROGRESS','RESOLVED') NOT NULL DEFAULT 'OPEN', -- Status of complaint
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+ -- Relationships
+ CONSTRAINT fk_complaint_student FOREIGN KEY (student_id) REFERENCES students(id)
+ ON DELETE CASCADE ON UPDATE CASCADE, -- If student is deleted, complaint also gone
+CONSTRAINT fk_complaint_warden FOREIGN KEY (warden_id) REFERENCES wardens(id)
+ ON DELETE SET NULL ON UPDATE CASCADE -- If warden removed, complaint remains but 
+warden_id is NULL
+) ENGINE=InnoDB;
+
+ALTER TABLE complaints 
+ ADD COLUMN room_id BIGINT,
+ ADD CONSTRAINT fk_complaint_room FOREIGN KEY (room_id) REFERENCES rooms(id)
+ ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE students
+ADD COLUMN password VARCHAR(255) NOT NULL;
+update rooms SET current_occupancy=0;
+ALTER TABLE wardens
+ADD COLUMN password VARCHAR(255) NOT NULL;
+ALTER TABLE students DROP COLUMN phone;
+ALTER TABLE wardens DROP COLUMN phone;
+update rooms set current_occupancy=0 where id between 1 and 20;
+insert into wardens (password) values('grace');wardens
+update wardens set password='grace' where id=1;
+UPDATE hostel_db.wardens SET password = 'grace' WHERE id = 1;
+UPDATE hostel_db.wardens SET password = 'dhipa' WHERE id = 2;
+UPDATE hostel_db.wardens SET password = 'ganga' WHERE id = 3;
+UPDATE hostel_db.wardens SET password = 'hari' WHERE id = 4;
+select * from wardens;
+update wardens set password='anna' where id=5;
